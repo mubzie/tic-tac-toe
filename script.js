@@ -1,60 +1,21 @@
-// const gameBoardDisplay = document.querySelectorAll('cell');
-const gameboard = ['x', 'o', 'x', 'o', 'x', 'o', 'x', 'o', 'x',]
+//target html gameboard DOM
+const boards = document.querySelectorAll(".cell");
 
+const gameModule = (() => {
 
-// const gameboard = ['', '', '', '', '', '', '', '', '',]
-
-const cells = document.querySelectorAll(".cell");
+const boardgame = new Array(9).fill("x")
 
 const gameBoardDisplay = () => {
-
-    // const gameboard = ['x', 'o', 'x', 'x', 'o', 'x', 'o', 'o', 'x',]
- 
-    // const cells = document.querySelectorAll(".cell");
-    
-    cells.forEach((cell) => {
-        cell.textContent = gameboard[cell.id]
-        // cell.addEventListener('click', () =>{
-        //     console.log(cell)
-        //     cell.textContent = gameboard[cell.d]
-        //     // cell.textContent = gameboard.push(cell.id)
-        //     console.log(gameboard)
-        // })
+    boards.forEach((board) => {
+        console.log(board)
+        board.textContent = boardgame[board.id]
+        console.log(board.id)
     })
-
 }
-
-gameBoardDisplay();
-
-
-const player = () => {
-const marker = x;
-
+return{
+    gameBoardDisplay
 }
+})();
 
-// const gameBoardModule = (function() {
-
-//     const gameBoardObject = {
-//         gameboard: ['x', 'o', 'x', 'o', 'x', 'o', 'x', 'o', 'x',]
-//     }
-
-//     gameBoardDisplay.textContent = gameboard.forEach(board => {
-//         console.log(board)
-//     });
-
-// })();
-
-// console.log(gameBoard.gameBoardObject) 
-
-// const displayController = (function() {
-//     const displayControllerObject = () => {
-
-//     }
-// })();
-
-// const Player = (name, marker) => {
-
-// }
-
-// const  playerOne = ('playerOne', 'X');
-// const playerTwo = ('playerTwo', 'O');
+console.log(gameModule.gameBoardDisplay())
+// console.log(gameModule)
