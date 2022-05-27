@@ -15,7 +15,7 @@ const Player = (name, marker) => {
 
 //The game module 
 const gameModule = (() => {
-const _board = new Array(9).fill("");
+let _board = new Array(9).fill("");
 
 const getBoard = () => {
     return [..._board];
@@ -30,8 +30,12 @@ const BoardDisplay = () => {
 }
 
 const placeMarker = (index, marker) => {
+    // if(_board !== "") {
+    //     _board[index] = marker;
+    // }
 _board[index] = marker;
 BoardDisplay();
+// switchPlayerTurn();
 }
 
 const boardReset = () => {
@@ -45,9 +49,10 @@ const checkWin = (marker) => {
                          [0,4,8],[2,4,6]];
 
     winCondition.forEach(condition => {
-        if(_board[condition[0]] === marker && _board[condition[1]] && _board[condition[2]]) {
-            return true;
+        if(_board[condition[0]] === marker && _board[condition[1]] === marker && _board[condition[2]] === marker) {
+            // return true;
             console.log('yur');
+            return true;
         }
     })                  
 };
@@ -58,6 +63,7 @@ return{
     placeMarker,
     boardReset,
     BoardDisplay,
+    checkWin
 }
 })();
 // console.log(gameModule.getBoard())
@@ -68,7 +74,7 @@ const game = (() => {
     const player1 = Player("you", "X");
     const player2 = Player("computer", "O");
 
-    const currentPlayer = player1;
+    let currentPlayer = player1;
 
     const switchPlayerTurn = () => {
         if(currentPlayer === player1) {
@@ -86,12 +92,14 @@ const game = (() => {
     let index = Array.prototype.indexOf.call(gameBoard.children, e.target)
     gameModule.placeMarker(index, currentPlayer.getMark())
 
+    switchPlayerTurn();
     }
 
     gameBoard.addEventListener('click', gamePlay)
 
    return{
-       switchPlayerTurn,
+       turnsPlayed,
+    //    switchPlayerTurn,
        currentPlayer,
    }
 })();
