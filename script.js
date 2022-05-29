@@ -24,18 +24,15 @@ const getBoard = () => {
 const BoardDisplay = () => {
     let displayBoard = getBoard();
     for (let i = 0; i <= cells.length - 1; i++) {
-        cells[i].textContent = displayBoard[i];
-        
+        cells[i].textContent = displayBoard[i]; 
     }
 }
 
 const placeMarker = (index, marker) => {
-    // if(_board !== "") {
-    //     _board[index] = marker;
-    // }
-_board[index] = marker;
+    if(_board[index] == "") {
+        _board[index] = marker;
+    }
 BoardDisplay();
-// switchPlayerTurn();
 }
 
 const boardReset = () => {
@@ -57,7 +54,6 @@ const checkWin = (marker) => {
     })                  
 };
 
-
 return{
     getBoard,
     placeMarker,
@@ -66,7 +62,7 @@ return{
     checkWin
 }
 })();
-// console.log(gameModule.getBoard())
+
 
 //the module that handles the flow of the game
 const game = (() => {
@@ -84,40 +80,30 @@ const game = (() => {
         }
     }
 
+    const detachEvent = (cell) => {
+        cell.removeEventListener('click', gamePlay)
+    }
+
     let turnsPlayed = 0;
 
     const gamePlay = (e) => {
     turnsPlayed++
-
-    let index = Array.prototype.indexOf.call(gameBoard.children, e.target)
+    
+    let box = e.target;
+    let index = Array.prototype.indexOf.call(cells, box)
     gameModule.placeMarker(index, currentPlayer.getMark())
-
+     
+    detachEvent(box);
     switchPlayerTurn();
     }
 
-    gameBoard.addEventListener('click', gamePlay)
+    cells.forEach(cell => {
+        cell.addEventListener('click', gamePlay)
+    })
 
    return{
        turnsPlayed,
-    //    switchPlayerTurn,
        currentPlayer,
+       gamePlay,
    }
 })();
-
-//    boards.forEach((board, index) => {
-//        board.addEventListener('click', () => {
-//         gameModule._board[index] = currentPlayer;
-//        console.log(gameModule._board)
-       
-//         //    alert('bro')
-//        })
-//    });
-
-// const gameBoardDisplay = () => {
-//     boards.forEach( (index, board) => {
-//         console.log(board)
-//         board.textContent = _board[index]
-//         console.log(board.id)
-//         console.log(index)
-//     })
-// }
