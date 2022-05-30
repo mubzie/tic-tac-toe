@@ -1,5 +1,5 @@
   // DOM selection
-  const gameBoard = document.querySelector("#gameboard-container");
+//   const gameBoard = document.querySelector("#gameboard-container");
   const cells = document.querySelectorAll(".cell");
 
 //player factory function
@@ -13,8 +13,9 @@ const Player = (name, marker) => {
  };
 
 
-//The game module 
+//The game module that holds the game functionality
 const gameModule = (() => {
+
 let _board = new Array(9).fill("");
 
 const getBoard = () => {
@@ -32,34 +33,33 @@ const placeMarker = (index, marker) => {
     if(_board[index] == "") {
         _board[index] = marker;
     }
-BoardDisplay();
+    BoardDisplay();
 }
 
 const boardReset = () => {
     _board = new Array(9).fill("");
 }
 
-const checkWin = (marker) => {
-    const winCondition = [[0,1,2],[3,4,5],
-                         [6,7,8], [0,3,6],
-                         [1,4,7],[2,5,8],
-                         [0,4,8],[2,4,6]];
+let winner = '';
 
-    winCondition.forEach(condition => {
-        if(_board[condition[0]] === marker && _board[condition[1]] === marker && _board[condition[2]] === marker) {
-            // return true;
-            console.log('yur');
-            return true;
+const checkForWin = () => {
+
+ const winCondition = [[0,1,2],[3,4,5], [6,7,8], [0,3,6], [1,4,7],[2,5,8], [0,4,8],[2,4,6]];
+
+  return winCondition.find( condition => {
+      if(_board[condition[0]] && 
+        (_board[condition[0]] === _board[condition[1]] && _board[condition[1]] === _board[condition[2]])) {
+            console.log('true');
         }
-    })                  
-};
+  })
+}
 
 return{
     getBoard,
     placeMarker,
     boardReset,
     BoardDisplay,
-    checkWin
+    checkForWin,
 }
 })();
 
@@ -84,19 +84,32 @@ const game = (() => {
         cell.removeEventListener('click', gamePlay)
     }
 
+    const detachAllEvent = () => {
+    cells.forEach( box => {
+        box.removeEventListener('click', gamePlay)
+    })
+    }
+
     let turnsPlayed = 0;
 
     const gamePlay = (e) => {
     turnsPlayed++
     
     let box = e.target;
+
     let index = Array.prototype.indexOf.call(cells, box)
     gameModule.placeMarker(index, currentPlayer.getMark())
+
+    if(turnsPlayed > 4) {
+        gameModule.checkForWin()
+        // detachAllEvent();
+    }
      
     detachEvent(box);
     switchPlayerTurn();
     }
 
+    //EventListener that controls the flow of gameplay 
     cells.forEach(cell => {
         cell.addEventListener('click', gamePlay)
     })
