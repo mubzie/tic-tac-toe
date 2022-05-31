@@ -1,5 +1,4 @@
   // DOM selection
-//   const gameBoard = document.querySelector("#gameboard-container");
   const cells = document.querySelectorAll(".cell");
 
 //player factory function
@@ -40,17 +39,13 @@ const boardReset = () => {
     _board = new Array(9).fill("");
 }
 
-let winner = '';
-
 const checkForWin = () => {
 
  const winCondition = [[0,1,2],[3,4,5], [6,7,8], [0,3,6], [1,4,7],[2,5,8], [0,4,8],[2,4,6]];
 
   return winCondition.find( condition => {
-      if(_board[condition[0]] && 
-        (_board[condition[0]] === _board[condition[1]] && _board[condition[1]] === _board[condition[2]])) {
-            console.log('true');
-        }
+      return (_board[condition[0]] && 
+        (_board[condition[0]] === _board[condition[1]] && _board[condition[1]] === _board[condition[2]]))
   })
 }
 
@@ -100,9 +95,11 @@ const game = (() => {
     let index = Array.prototype.indexOf.call(cells, box)
     gameModule.placeMarker(index, currentPlayer.getMark())
 
-    if(turnsPlayed > 4) {
-        gameModule.checkForWin()
-        // detachAllEvent();
+    if(turnsPlayed > 4 && gameModule.checkForWin()) {
+        console.log(`winner is ${currentPlayer.getMark()}`)
+        detachAllEvent();
+    } else if ( turnsPlayed === 9) {
+        console.log('it is a draw')
     }
      
     detachEvent(box);
