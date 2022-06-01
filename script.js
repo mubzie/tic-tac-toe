@@ -93,7 +93,7 @@ const game = (() => {
     }
 
     const drawAlert = () => {
-       displayArea.textContent = "Game ended in a Draw"
+       displayArea.textContent = "The game ended in a Draw"
     }
 
     const resetGame = () => {
@@ -119,9 +119,9 @@ const game = (() => {
 
     const turnDisplay = () => {
         if (currentPlayer === player1) {
-            displayArea.textContent = `it is player ${player2.getMark()} turn`
+            displayArea.textContent = `it is player ${player2.getMark()}'s turn`
         } else if (currentPlayer === player2) {
-            displayArea.textContent = `it is player ${player1.getMark()} turn`
+            displayArea.textContent = `it is player ${player1.getMark()}'s turn`
         }
     }
 
