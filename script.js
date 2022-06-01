@@ -1,5 +1,7 @@
   // DOM selection
   const cells = document.querySelectorAll(".cell");
+  const displayArea = document.querySelector(".display-area");
+  const ResetBtn = document.querySelector("button");
 
 //player factory function
 const Player = (name, marker) => {
@@ -31,6 +33,7 @@ const BoardDisplay = () => {
 const placeMarker = (index, marker) => {
     if(_board[index] == "") {
         _board[index] = marker;
+        game.turnDisplay()
     }
     BoardDisplay();
 }
@@ -85,35 +88,75 @@ const game = (() => {
     })
     }
 
+    const winAlert = () => {
+        displayArea.textContent = `player ${currentPlayer.getMark()} wins the game`
+    }
+
+    const drawAlert = () => {
+       displayArea.textContent = "Game ended in a Draw"
+    }
+
+    const resetGame = () => {
+
+        gameModule.boardReset();
+        gameModule.BoardDisplay();
+
+       turnsPlayed = 0;
+
+       currentPlayer = player1;
+
+       displayArea.textContent = "Start the game by clicking on any of the cells";
+
+       cells.forEach(cell => {
+        cell.addEventListener('click', gamePlay);
+       })
+
+    }
+
+    displayArea.textContent = "Start the game by clicking on any of the cells";
+
     let turnsPlayed = 0;
 
-    const gamePlay = (e) => {
-    turnsPlayed++
-    
-    let box = e.target;
-
-    let index = Array.prototype.indexOf.call(cells, box)
-    gameModule.placeMarker(index, currentPlayer.getMark())
-
-    if(turnsPlayed > 4 && gameModule.checkForWin()) {
-        console.log(`winner is ${currentPlayer.getMark()}`)
-        detachAllEvent();
-    } else if ( turnsPlayed === 9) {
-        console.log('it is a draw')
+    const turnDisplay = () => {
+        if (currentPlayer === player1) {
+            displayArea.textContent = `it is player ${player2.getMark()} turn`
+        } else if (currentPlayer === player2) {
+            displayArea.textContent = `it is player ${player1.getMark()} turn`
+        }
     }
-     
+
+    const gamePlay = (e) => {
+       turnsPlayed++
+    
+       let box = e.target;
+
+       let index = Array.prototype.indexOf.call(cells, box)
+       gameModule.placeMarker(index, currentPlayer.getMark())
+
+       if(turnsPlayed > 4 && gameModule.checkForWin()) {
+           winAlert();
+           detachAllEvent();
+        } else if ( turnsPlayed === 9) {
+           drawAlert();
+       }
+    
     detachEvent(box);
     switchPlayerTurn();
+
     }
 
-    //EventListener that controls the flow of gameplay 
+    //EventListener that plays the game 
     cells.forEach(cell => {
         cell.addEventListener('click', gamePlay)
     })
+
+    //EventListener that reset the game 
+    ResetBtn.addEventListener('click', resetGame)
 
    return{
        turnsPlayed,
        currentPlayer,
        gamePlay,
+       turnDisplay
    }
 })();
