@@ -44,12 +44,12 @@ const boardReset = () => {
 
 const checkForWin = () => {
 
- const winCondition = [[0,1,2],[3,4,5], [6,7,8], [0,3,6], [1,4,7],[2,5,8], [0,4,8],[2,4,6]];
+    const winCondition = [[0,1,2],[3,4,5], [6,7,8], [0,3,6], [1,4,7],[2,5,8], [0,4,8],[2,4,6]];
 
-  return winCondition.find( condition => {
-      return (_board[condition[0]] && 
+    return winCondition.find( condition => {
+        return (_board[condition[0]] && 
         (_board[condition[0]] === _board[condition[1]] && _board[condition[1]] === _board[condition[2]]))
-  })
+    })
 }
 
 return{
