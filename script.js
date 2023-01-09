@@ -140,8 +140,8 @@ const game = (() => {
            drawAlert();
        }
     
-    detachEvent(box);
-    switchPlayerTurn();
+        detachEvent(box);
+        switchPlayerTurn();
 
     }
 

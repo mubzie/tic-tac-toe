@@ -1,3 +1,5 @@
+const cells = document.querySelectorAll('.cell');
+
 const playerFactory = (name, marker) =>  {
 
     const setName = (newName) => {
@@ -30,16 +32,22 @@ const gameBoardModule = (() => {
 
     const resetBoard = () => {
         _board = new Array(9).fill('');
-        // console.log(_board)
+    }
+
+    const boardDisplay = () => {
+        let displayBoard = getBoard();
+        for (let i = 0; i <= cells.length - 1; i++) {
+            cells[i].textContent = displayBoard[i];
+        }
+        console.log(displayBoard)
     }
 
     const placeMarker = (index, marker) => {
+       if (_board[index] === '') {
         _board[index] = marker;
-        console.log(_board)
+       }
+       boardDisplay()
     }
-
-    resetBoard()
-
 
     const checkForWin = (board) => {
     
@@ -73,7 +81,8 @@ const gameBoardModule = (() => {
         getBoard,
         resetBoard,
         placeMarker,
-        checkForWin
+        checkForWin,
+        boardDisplay
     }
 
 })();
@@ -87,14 +96,35 @@ const gamePlay = (() => {
 
     const switchPlayer = () => {
         if (currentPlayer === player1) {
-            currentPlayer = player2
+            currentPlayer = player2;
         } else {
-            currentPlayer = player1
+            currentPlayer = player1;
         }
+    };
+
+    
+    const play = (e) => {
+
+        gameBoardModule.placeMarker(e.target.id, currentPlayer.getMarker())
+
+        detachEvent(e.target)
+        switchPlayer()
+
     }
 
-    gameBoardModule.placeMarker(0, currentPlayer.getMarker())
-    gameBoardModule.getBoard()
+    const detachAllEvent = () => {
+        cells.forEach(cell => {
+            cell.removeEventListener('click', play)
+        })
+    }
+    
+    const detachEvent = (cell) => {
+        cell.removeEventListener('click', play);
+    }
+    
+    cells.forEach( cell => {
+        cell.addEventListener('click', play)
+    })
 
     return {
         currentPlayer,
