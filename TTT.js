@@ -12,15 +12,13 @@ const playerFactory = (name, marker) =>  {
     const getMarker = () => { return marker }
 
     return {
-        setMarker,
         setName,
+        setMarker,
         getName,
         getMarker
     }
 }
 
-const player1 = playerFactory('human', 'x')
-const player2 = playerFactory('comp', 'o')
 
 const gameBoardModule = (() => {
 
@@ -32,7 +30,7 @@ const gameBoardModule = (() => {
 
     const resetBoard = () => {
         _board = new Array(9).fill('');
-        console.log(_board)
+        // console.log(_board)
     }
 
     const placeMarker = (index, marker) => {
@@ -42,12 +40,8 @@ const gameBoardModule = (() => {
 
     resetBoard()
 
-    placeMarker(0, player1.getMarker())
-    placeMarker(4, player1.getMarker())
-    placeMarker(8, player1.getMarker())
 
     const checkForWin = (board) => {
-
     
         const winConditions = [
         [ board[0], board[1], board[2] ], 
@@ -74,15 +68,37 @@ const gameBoardModule = (() => {
         
         
     }
-
-    checkForWin(_board)
-    
     
     return {
         getBoard,
         resetBoard,
         placeMarker,
         checkForWin
+    }
+
+})();
+
+const gamePlay = (() => {
+
+    const player1 = playerFactory('human', 'x');
+    const player2 = playerFactory('human2', 'o');
+
+    let currentPlayer = player1;
+
+    const switchPlayer = () => {
+        if (currentPlayer === player1) {
+            currentPlayer = player2
+        } else {
+            currentPlayer = player1
+        }
+    }
+
+    gameBoardModule.placeMarker(0, currentPlayer.getMarker())
+    gameBoardModule.getBoard()
+
+    return {
+        currentPlayer,
+        switchPlayer
     }
 
 })();
