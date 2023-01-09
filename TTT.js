@@ -40,14 +40,39 @@ const gameBoardModule = (() => {
         console.log(board)
     }
 
-    const checkForWin = () => {
+    resetBoard()
+
+    placeMarker(0, player1.getMarker())
+    placeMarker(1, player1.getMarker())
+    placeMarker(2, player1.getMarker())
+
+    const checkForWin = (board) => {
+
+    
+        const winConditions = [
+        [ board[0], board[1], board[2] ], 
+        [ board[3], board[4], board[5] ],
+        [ board[6], board[7], board[8] ],
+        [ board[0], board[3], board[6] ],
+        [ board[1], board[4], board[7] ],
+        [ board[2], board[5], board[8] ],
+        [ board[0], board[4], board[8] ],
+        [ board[2], board[4], board[6] ]
+        ];
+        
+        console.log(winConditions[7])
+
+        
+
 
     }
+
 
     return {
         getBoard,
         resetBoard,
-        placeMarker
+        placeMarker,
+        checkForWin
     }
 
 })();
