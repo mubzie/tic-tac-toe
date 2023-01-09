@@ -24,27 +24,27 @@ const player2 = playerFactory('comp', 'o')
 
 const gameBoardModule = (() => {
 
-    let board = new Array(9).fill('');
+    let _board = new Array(9).fill('');
 
     const getBoard = () => {
-        return [...board]
+        return [..._board]
     }
 
     const resetBoard = () => {
-        board = new Array(9).fill('');
-        console.log(board)
+        _board = new Array(9).fill('');
+        console.log(_board)
     }
 
     const placeMarker = (index, marker) => {
-        board[index] = marker;
-        console.log(board)
+        _board[index] = marker;
+        console.log(_board)
     }
 
     resetBoard()
 
     placeMarker(0, player1.getMarker())
-    placeMarker(1, player1.getMarker())
-    placeMarker(2, player1.getMarker())
+    placeMarker(4, player1.getMarker())
+    placeMarker(8, player1.getMarker())
 
     const checkForWin = (board) => {
 
@@ -59,15 +59,25 @@ const gameBoardModule = (() => {
         [ board[0], board[4], board[8] ],
         [ board[2], board[4], board[6] ]
         ];
+
+        const checWin = winConditions.find(
+            condition => condition.every( 
+                combo => combo === 'x'
+            )
+        );
+
+        if(checWin) {
+            console.log('win')
+        } else {
+            console.log('no win')
+        }
         
-        console.log(winConditions[7])
-
         
-
-
     }
 
-
+    checkForWin(_board)
+    
+    
     return {
         getBoard,
         resetBoard,
