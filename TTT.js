@@ -36,7 +36,7 @@ const gameBoardModule = (() => {
 
     const boardDisplay = () => {
         let displayBoard = getBoard();
-        for (let i = 0; i <= cells.length - 1; i++) {
+        for (let i = 0; i < cells.length; i++) {
             cells[i].textContent = displayBoard[i];
         }
         console.log(displayBoard)
@@ -50,7 +50,9 @@ const gameBoardModule = (() => {
     }
 
     const checkForWin = (board) => {
-    
+
+        let winner;
+
         const winConditions = [
         [ board[0], board[1], board[2] ], 
         [ board[3], board[4], board[5] ],
@@ -61,19 +63,26 @@ const gameBoardModule = (() => {
         [ board[0], board[4], board[8] ],
         [ board[2], board[4], board[6] ]
         ];
-
-        const checWin = winConditions.find(
+        
+        const checWinX = winConditions.find(
             condition => condition.every( 
                 combo => combo === 'x'
             )
         );
-
-        if(checWin) {
-            console.log('win')
-        } else {
-            console.log('no win')
-        }
         
+        const checWinO = winConditions.find(
+            condition => condition.every( 
+                combo => combo === 'o'
+            )
+        );
+
+        if(checWinX || checWinO) {
+            winner = true
+        } else {
+            winner = false
+        }
+
+        return winner
         
     }
     
@@ -81,16 +90,17 @@ const gameBoardModule = (() => {
         getBoard,
         resetBoard,
         placeMarker,
-        checkForWin,
-        boardDisplay
+        checkForWin
     }
 
 })();
 
 const gamePlay = (() => {
 
-    const player1 = playerFactory('human', 'x');
-    const player2 = playerFactory('human2', 'o');
+    const displayScreen = document.querySelector('.display-area');
+
+    const player1 = playerFactory('player1', 'x');
+    const player2 = playerFactory('player2', 'o');
 
     let currentPlayer = player1;
 
@@ -102,16 +112,43 @@ const gamePlay = (() => {
         }
     };
 
+    let playerTurn = 0;
+
+    if(playerTurn === 0) {
+        displayScreen.textContent = 'click on the gameboard to begin'
+    } 
+
+    // const turnDisplay = () => {
+    //     if (currentPlayer === player1) {
+    //         displayScreen.textContent = `it is player ${player1.getMarker()}'s turn`
+    //     } else if (currentPlayer === player2) {
+    //         displayScreen.textContent = `it is player ${player2.getMarker()}'s turn`
+    //     }
+    // }
     
     const play = (e) => {
 
+        playerTurn++
+        
         gameBoardModule.placeMarker(e.target.id, currentPlayer.getMarker())
-
+        
+        console.log(playerTurn)
+        
+        if(playerTurn > 4 && gameBoardModule.checkForWin(gameBoardModule.getBoard())) {
+            console.log(`${currentPlayer.getMarker()} wins`)
+            displayScreen.textContent = `${currentPlayer.getName()} wins`
+            detachAllEvent()
+        } 
+        
+        if (playerTurn === 9) {
+            console.log('game ended in draw')
+            displayScreen.textContent = 'game ended in a draw'
+        }
+        
         detachEvent(e.target)
         switchPlayer()
-
     }
-
+    
     const detachAllEvent = () => {
         cells.forEach(cell => {
             cell.removeEventListener('click', play)
