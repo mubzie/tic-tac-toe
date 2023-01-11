@@ -14,9 +14,6 @@ const playerFactory = (name, marker) =>  {
     const getMarker = () => { return marker }
 
     return {
-        setName,
-        setMarker,
-        getName,
         getMarker
     }
 }
@@ -39,7 +36,6 @@ const gameBoardModule = (() => {
         for (let i = 0; i < cells.length; i++) {
             cells[i].textContent = displayBoard[i];
         }
-        console.log(displayBoard)
     }
 
     const placeMarker = (index, marker) => {
@@ -90,20 +86,27 @@ const gameBoardModule = (() => {
         getBoard,
         resetBoard,
         placeMarker,
-        checkForWin
+        checkForWin,
+        boardDisplay
     }
 
 })();
 
 const gamePlay = (() => {
 
+    // targeting the DOM 
     const displayScreen = document.querySelector('.display-area');
-
+    const resetBtn = document.querySelector('.reset-btn');
+    
+    displayScreen.textContent = 'click on the gameboard to start the game';
+    
+    // instantiating the playerFactory function 
     const player1 = playerFactory('player1', 'x');
     const player2 = playerFactory('player2', 'o');
-
+    
     let currentPlayer = player1;
-
+    
+    // the function track the current player status during the game play
     const switchPlayer = () => {
         if (currentPlayer === player1) {
             currentPlayer = player2;
@@ -111,61 +114,78 @@ const gamePlay = (() => {
             currentPlayer = player1;
         }
     };
+    
+    // setting turns played by players to 0 to track the game play
+    let turnsPlayed = 0;
 
-    let playerTurn = 0;
 
-    if(playerTurn === 0) {
-        displayScreen.textContent = 'click on the gameboard to begin'
-    } 
-
-    // const turnDisplay = () => {
-    //     if (currentPlayer === player1) {
-    //         displayScreen.textContent = `it is player ${player1.getMarker()}'s turn`
-    //     } else if (currentPlayer === player2) {
-    //         displayScreen.textContent = `it is player ${player2.getMarker()}'s turn`
-    //     }
-    // }
+    const turnDisplay = () => {
+        if (currentPlayer === player1) {
+            displayScreen.textContent = `it is player ${player2.getMarker()}'s turn`
+        } else if (currentPlayer === player2) {
+            displayScreen.textContent = `it is player ${player1.getMarker()}'s turn`
+        }
+    }
     
     const play = (e) => {
 
-        playerTurn++
+        turnsPlayed++
+        turnDisplay()
         
         gameBoardModule.placeMarker(e.target.id, currentPlayer.getMarker())
         
-        console.log(playerTurn)
-        
-        if(playerTurn > 4 && gameBoardModule.checkForWin(gameBoardModule.getBoard())) {
-            console.log(`${currentPlayer.getMarker()} wins`)
-            displayScreen.textContent = `${currentPlayer.getName()} wins`
+        if(turnsPlayed > 4 && gameBoardModule.checkForWin(gameBoardModule.getBoard())) {
+            winAlert()
             detachAllEvent()
-        } 
-        
-        if (playerTurn === 9) {
-            console.log('game ended in draw')
-            displayScreen.textContent = 'game ended in a draw'
+        } else if (turnsPlayed === 9) {
+            drawAlert()
         }
         
         detachEvent(e.target)
         switchPlayer()
     }
     
+    // game start by clicking on the cells
+    cells.forEach( cell => {
+        cell.addEventListener('click', play)
+    })
+
     const detachAllEvent = () => {
         cells.forEach(cell => {
             cell.removeEventListener('click', play)
         })
+    }
+
+    const winAlert = () =>  {
+        displayScreen.textContent = `player ${currentPlayer.getMarker()} wins the game`;
+    }
+
+    const drawAlert = () => {
+        displayScreen.textContent = 'game ended in a draw';
     }
     
     const detachEvent = (cell) => {
         cell.removeEventListener('click', play);
     }
     
-    cells.forEach( cell => {
-        cell.addEventListener('click', play)
-    })
 
-    return {
-        currentPlayer,
-        switchPlayer
+    const  resetGame = () => {
+
+        currentPlayer = player1;
+        
+        turnsPlayed = 0;
+
+        gameBoardModule.resetBoard();
+        gameBoardModule.boardDisplay();
+
+        displayScreen.textContent = 'click on the gameboard to begin';
+
+        cells.forEach( cell => {
+            cell.addEventListener('click', play)
+        })
+
     }
+
+    resetBtn.addEventListener('click', resetGame);
 
 })();

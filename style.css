@@ -1,9 +1,15 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+* {
   margin: 0;
   padding: 0;
-  font-family: "Inter";
-  font-size: 18px;
-  height: 100vh;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', Helvetica, sans-serif;
+  font-size: 16px;
+  /* height: 100vh; */
   background-color: #EAEBEF;
   color: #14303F;
   display: flex;
@@ -11,18 +17,25 @@ body {
 }
 
 header {
-  font-size: 24px;
-  text-transform: uppercase;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 60px;
+  font-size: 1.3rem;
   font-weight: 700;
-  padding: 24px;
+  text-transform: uppercase;
+}
+
+div.display-area {
+  padding: 16px 60px;
+  font-size: 1.4rem;
 }
 
 .wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 24px;
 }
 
 #gameboard-container {
@@ -76,7 +89,7 @@ header {
 .reset-btn {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 24px;
 }
 
 button {
@@ -85,4 +98,5 @@ button {
   background-color: #14303F;
   border: none;
   cursor: pointer;
+  border-radius: 4px;
 }
